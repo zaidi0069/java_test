@@ -1,0 +1,96 @@
+import java.util.Scanner;
+
+// A simple Tic Tac Toe game in Java
+public class TicTacToe {
+
+    private static char[][] board = {
+        {' ', ' ', ' '},
+        {' ', ' ', ' '},
+        {' ', ' ', ' '}
+    };
+
+    private static char currentPlayer = 'X';
+
+    // Method to display the current board
+    public static void displayBoard() {
+        System.out.println("\nCurrent Board:");
+        for (int i = 0; i < 3; i++) {
+            System.out.println(" " + board[i][0] + " | " + board[i][1] + " | " + board[i][2]);
+            if (i < 2) System.out.println("---+---+---");
+        }
+    }
+
+    // Method to make a move on the board
+    public static boolean makeMove(int row, int col) {
+        if (row < 0 || row >= 3 || col < 0 || col >= 3 || board[row][col] != ' ') {
+            System.out.println("Invalid move. Try again.");
+            return false;
+        }
+        board[row][col] = currentPlayer;
+        return true;
+    }
+
+    // Method to check if the current player has won
+    public static boolean checkWin() {
+        // Check rows and columns
+        for (int i = 0; i < 3; i++) {
+            if ((board[i][0] == currentPlayer && board[i][1] == currentPlayer && board[i][2] == currentPlayer) ||
+                (board[0][i] == currentPlayer && board[1][i] == currentPlayer && board[2][i] == currentPlayer)) {
+                return true;
+            }
+        }
+        // Check diagonals
+        if ((board[0][0] == currentPlayer && board[1][1] == currentPlayer && board[2][2] == currentPlayer) ||
+            (board[0][2] == currentPlayer && board[1][1] == currentPlayer && board[2][0] == currentPlayer)) {
+            return true;
+        }
+        return false;
+    }
+
+    // Method to check if the board is full
+    public static boolean isBoardFull() {
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (board[i][j] == ' ') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    // Method to switch the current player
+    public static void switchPlayer() {
+        currentPlayer = (currentPlayer == 'X') ? 'O' : 'X';
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Welcome to Tic Tac Toe!");
+
+        while (true) {
+            displayBoard();
+            System.out.println("Player " + currentPlayer + "'s turn.");
+            System.out.print("Enter row (0, 1, or 2): ");
+            int row = scanner.nextInt();
+            System.out.print("Enter column (0, 1, or 2): ");
+            int col = scanner.nextInt();
+
+            if (makeMove(row, col)) {
+                if (checkWin()) {
+                    displayBoard();
+                    System.out.println("Player " + currentPlayer + " wins!");
+                    break;
+                } else if (isBoardFull()) {
+                    displayBoard();
+                    System.out.println("It's a draw!");
+                    break;
+                }
+                switchPlayer();
+            }
+        }
+
+        scanner.close();
+        System.out.println("Game Over!");
+    }
+}
